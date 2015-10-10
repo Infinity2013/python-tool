@@ -22,11 +22,17 @@ def generate_page_list(url):
 def parse_page(url):
     src = urllib.urlopen(url).read()
     soup = BeautifulSoup(src)
-    print soup.find(attrs={'class': 'ptb45 bgcolor1 xreader'})
+    children = soup.find(attrs={'class': 'ptb45 bgcolor1 xreader'}).findChildren()
+    res = []
+    for child in children:
+        res.append(child.getText())
+    return "\n".join(res).encode('utf-8')
 
 def main():
+    fd = open("baidu", "w")
     page_list = generate_page_list('http://wenku.baidu.com/view/de25f40a4a7302768e9939dc?pn=1&ssid=&from=&bd_page_type=1&uid=980CD609A635C937C6CE573884994FCC&pu=rc@1,pic@on,sl@1,pw@1000,sz@224_220,pd@1,fz@2,lp@1,tpl@color,&st=1&wk=rd&maxpage=121&pos=last')
-    parse_page(page_list[0])
+    for page in page_list:
+        fd.write(parse_page(page))
 
 if __name__ == '__main__':
     main()
