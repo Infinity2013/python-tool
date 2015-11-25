@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import re
 import urllib
-import os
-import sys
-import subprocess
 from BeautifulSoup import BeautifulSoup
+import sys
+
 
 def generate_page_list(url):
     # http://wenku.baidu.com/view/de25f40a4a7302768e9939dc?pn=1&ssid=&from=&bd_page_type=1&uid=980CD609A635C937C6CE573884994FCC&pu=rc@1,pic@on,sl@1,pw@1000,sz@224_220,pd@1,fz@2,lp@1,tpl@color,&st=1&wk=rd&maxpage=121&pos=last
@@ -17,7 +16,7 @@ def generate_page_list(url):
         t = re.sub(r'pn=\d+', 'pn=%d' % i, url)
         t = t.replace('wenku', 'wapwenku')
         page_list.append(t)
-    return page_list
+
 
 def parse_page(url):
     src = urllib.urlopen(url).read()
@@ -28,9 +27,10 @@ def parse_page(url):
         res.append(child.getText())
     return "\n".join(res).encode('utf-8')
 
+
 def main():
     fd = open("baidu", "w")
-    page_list = generate_page_list('http://wenku.baidu.com/view/de25f40a4a7302768e9939dc?pn=1&ssid=&from=&bd_page_type=1&uid=980CD609A635C937C6CE573884994FCC&pu=rc@1,pic@on,sl@1,pw@1000,sz@224_220,pd@1,fz@2,lp@1,tpl@color,&st=1&wk=rd&maxpage=121&pos=last')
+    page_list = generate_page_list("http://wenku.baidu.com/view/6660bb14453610661ed9f478?pn=1&ssid=&from=&bd_page_type=1&uid=38DE27B3E71C136688AB60FF2C05C12C&pu=rc@1,pic@on,sl@1,pw@1000,sz@224_220,pd@1,fz@2,lp@1,tpl@color,&st=1&wk=rd&maxpage=132&pos=last")
     for page in page_list:
         fd.write(parse_page(page))
 
